@@ -1,7 +1,12 @@
 import pytest
 from adventure import enter_dungeon  # Assuming enter_dungeon is in adventure.py
+from unittest.mock import patch
+import io
+import sys
 
-def test_dungeon_rooms_is_list_of_tuples():
+def test_dungeon_rooms_is_list_of_tuples(monkeypatch, capsys): # Added monkeypatch
+    monkeypatch.setattr('builtins.input', lambda _: "skip") # Mock input to return "skip"
+
     dungeon_rooms = [
         ("Room 1", "item1", "none", None),
         ("Room 2", None, "puzzle", ("success", "fail", -5))
@@ -11,7 +16,7 @@ def test_dungeon_rooms_is_list_of_tuples():
     clues = set()
     artifacts = {}
     try:
-        enter_dungeon(player_stats, inventory, dungeon_rooms, clues, artifacts)
+        enter_dungeon(player_stats, inventory, dungeon_rooms, clues) # Removed artifacts
     except Exception as e:
         pytest.fail(f"enter_dungeon raised an exception with valid dungeon_rooms structure: {e}")
 
@@ -24,11 +29,13 @@ def test_dungeon_room_tuple_structure():
     inventory = []
     clues = set()
     artifacts = {}
-    with pytest.raises(TypeError) as excinfo: # Or potentially other errors depending on student's implementation
-        enter_dungeon(player_stats, inventory, dungeon_rooms_bad, clues, artifacts)
-    assert "tuple" in str(excinfo.value).lower() or "unpack" in str(excinfo.value).lower() # General error check, adjust as needed
+    with pytest.raises(ValueError) as excinfo: # Expect ValueError now
+        enter_dungeon(player_stats, inventory, dungeon_rooms_bad, clues) # Removed artifacts
+    assert "not enough values to unpack" in str(excinfo.value).lower() # More specific assertion
 
-def test_dungeon_rooms_challenge_types():
+def test_dungeon_rooms_challenge_types(monkeypatch, capsys): # Added monkeypatch
+    monkeypatch.setattr('builtins.input', lambda _: "skip") # Mock input to return "skip"
+
     dungeon_rooms_types = [
         ("Room none", None, "none", None),
         ("Room puzzle", None, "puzzle", ("success", "fail", -5)),
@@ -40,6 +47,6 @@ def test_dungeon_rooms_challenge_types():
     clues = set()
     artifacts = {}
     try:
-        enter_dungeon(player_stats, inventory, dungeon_rooms_types, clues, artifacts)
+        enter_dungeon(player_stats, inventory, dungeon_rooms_types, clues) # Removed artifacts
     except Exception as e:
         pytest.fail(f"enter_dungeon failed to handle all challenge types: {e}")

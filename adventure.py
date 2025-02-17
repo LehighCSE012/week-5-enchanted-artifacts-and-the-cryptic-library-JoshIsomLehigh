@@ -100,10 +100,12 @@ def discover_artifact(player_stats, artifacts, artifact_name):
 
         if effect == "increases health":
             player_stats['health'] += power
-            print(f"{artifact_name} {effect} by {power}. Your health is now {player_stats['health']}.")
+            print(f"{artifact_name} {effect} by {power}. "
+                  f"Your health is now {player_stats['health']}.")
         elif effect == "enhances attack":
             player_stats['attack'] += power
-            print(f"{artifact_name} {effect} by {power}. Your attack is now {player_stats['attack']}.")
+            print(f"{artifact_name} {effect} by {power}. "
+                  f"Your attack is now {player_stats['attack']}.")
         elif effect == "solves puzzles":
             print(f"{artifact_name} {effect}. You feel wiser.")
 
@@ -125,7 +127,7 @@ def find_clue(clues, new_clue):
         print("You already know this clue.")
     return clues
 
-def enter_dungeon(player_stats, inventory, dungeon_rooms, clues, artifacts):
+def enter_dungeon(player_stats, inventory, dungeon_rooms, clues): # Removed artifacts parameter
     """This section goes through the tuple
     of dungeon rooms and then outputs the player stats and inventory"""
     for room_tuple in dungeon_rooms:
@@ -179,8 +181,10 @@ def enter_dungeon(player_stats, inventory, dungeon_rooms, clues, artifacts):
                 clues = find_clue(clues, clue)
 
             if "staff_of_wisdom" in inventory: # Check if player has staff_of_wisdom in inventory
-                print("The Staff of Wisdom hums in your hand, and you feel a surge of understanding. The cryptic texts become clearer, revealing deeper meanings.")
-                print("You feel you could now bypass a puzzle if you wished, using this newfound knowledge.") # Staff of Wisdom effect message
+                print("The Staff of Wisdom hums in your hand, and you feel a surge of understanding. "
+                      "The cryptic texts become clearer, revealing deeper meanings.")
+                print("You feel you could now bypass a puzzle if you wished, "
+                      "using this newfound knowledge.") # Staff of Wisdom effect message
 
         if player_stats['health'] <= 0:
             player_stats['health'] = 0
@@ -211,7 +215,7 @@ def main():
     ("The Cryptic Library", None, "library", None) # New Cryptic Library room
 ]
     player_stats = {'health': 100, 'attack': 5} # Player stats as a dictionary, starting attack at 5
-    monster_health = 30
+    monster_health = 70
     inventory = []
     clues = set() # Initialize empty set for clues
     artifacts = { # Dictionary of artifacts
@@ -250,7 +254,7 @@ def main():
                 display_player_status(player_stats) # Display updated player stats
 
         if player_stats['health'] > 0:
-            player_stats, inventory, clues = enter_dungeon(player_stats, inventory, dungeon_rooms, clues, artifacts)
+            player_stats, inventory, clues = enter_dungeon(player_stats, inventory, dungeon_rooms, clues) # Removed artifacts
             print("\n--- Game End ---")
             display_player_status(player_stats)
             print("Final Inventory:")
