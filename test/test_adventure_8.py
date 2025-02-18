@@ -12,8 +12,8 @@ def test_cryptic_library_room_clues_found(capsys):
 
     enter_dungeon(player_stats, inventory, dungeon_rooms, clues)
     captured = capsys.readouterr()
-    assert "Enter Cryptic Library." in captured.out # Updated message
-    assert "Discovered new clue:" in captured.out # Updated message
+    assert "You enter the Cryptic Library." in captured.out # Corrected assertion
+    assert "Discovered new clue:" in captured.out
     assert len(clues) >= 1
 
 def test_cryptic_library_room_staff_of_wisdom_effect(capsys):
