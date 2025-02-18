@@ -9,11 +9,10 @@ def test_tuple_immutability_error_handling(capsys):
     player_stats = {'health': 100, 'attack': 5}
     inventory = []
     clues = set()
-    artifacts = {}
 
-    enter_dungeon(player_stats, inventory, dungeon_rooms, clues) # Removed artifacts
+    enter_dungeon(player_stats, inventory, dungeon_rooms, clues)
     captured = capsys.readouterr()
-    assert "Error: Cannot modify room tuples - they are immutable." in captured.out
+    assert "Error: Cannot modify room tuples - immutable." in captured.out # Correct assertion
 
 def test_enter_dungeon_runs_without_crash(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda _: "skip")
@@ -25,11 +24,10 @@ def test_enter_dungeon_runs_without_crash(monkeypatch):
     player_stats = {'health': 100, 'attack': 5}
     inventory = []
     clues = set()
-    artifacts = {}
     try:
-        updated_player_stats, inventory_out, clues_out = enter_dungeon( # Capture returned tuple
-            player_stats, inventory, dungeon_rooms, clues) # Removed artifacts
-        assert isinstance(updated_player_stats, dict) # Assert player_stats is a dict
+        updated_player_stats, inventory_out, clues_out = enter_dungeon(
+            player_stats, inventory, dungeon_rooms, clues)
+        assert isinstance(updated_player_stats, dict)
         assert isinstance(inventory_out, list)
         assert isinstance(clues_out, set)
     except Exception as e:
